@@ -4,9 +4,12 @@ import dotenv from 'dotenv';
 import { connectToDb } from './config/db.js';
 
 dotenv.config();
+
 const app = express();
 const port = process.env.PORT;
 const databaseConnection = connectToDb();
+
+app.use(express.json());
 
 app.get('/', (req, res) => {
     res.send('Server is running properly!')
