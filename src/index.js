@@ -6,6 +6,7 @@ import { connectToDb } from './config/db.js';
 dotenv.config();
 const app = express();
 const port = process.env.PORT;
+const databaseConnection = connectToDb();
 
 app.get('/', (req, res) => {
     res.send('Server is running properly!')
@@ -15,5 +16,5 @@ app.use('/api/auth', authRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-    connectToDb();
+    databaseConnection;
 })
