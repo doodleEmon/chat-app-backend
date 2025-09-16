@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import User from "./user.model";
 
+// create schema
 const messageSchema = new mongoose.Schema({
     senderId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -15,12 +16,13 @@ const messageSchema = new mongoose.Schema({
     text: {
         type: String,
     },
-    photo: {
+    image: {
         type: String
     }
 }, {
     timestamps: true
 })
 
+// create model
 const Message = mongoose.model("Message", messageSchema);
 export default Message;
