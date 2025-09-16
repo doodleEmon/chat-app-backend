@@ -31,6 +31,7 @@ export const signUp = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
+        // this means, i'm creating a object in local memory by mongoose like db's data(object)
         const newUser = new User({
             fullname,
             email,
@@ -39,7 +40,7 @@ export const signUp = async (req, res) => {
 
         if (newUser) {
             generateToken(newUser._id, res);
-            await newUser.save();
+            await newUser.save();  // after this, newUser data is saved into db
 
             res.status(201).json({
                 _id: newUser._id,
