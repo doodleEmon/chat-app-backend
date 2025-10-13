@@ -138,3 +138,47 @@ export const checkAuth = async (req, res) => {
         res.status(401).json({ message: "Unauthorized access" });
     }
 }
+
+export const searchUser = async (req, res) => {
+    try {
+        const { query } = req.query; // use query params for cleaner API (e.g., /api/users/search?query=emon)
+        const userId = req.user._id; // current logged-in user (from auth middleware)
+
+        if (!query || query.trim() === "") {
+            return res.status(400).json({ message: "Search query is required." });
+        }
+
+        // Build regex for case-insensitive partial match
+        const searchRegex = new RegExp(query, "i");
+
+        // Use aggregation for better control and flexibility
+        const filteredUsers = await User.aggregate([
+            {
+                $match: {
+                    _id: { $ne: userId }, // exclude current user
+                    $or: [
+                        { fullname: { $regex: searchRegex } },
+                        { email: { $regex: searchRegex } }
+                    ]
+                }
+            },
+            {
+                $project: {
+                    password: 0, // exclude sensitive fields
+                    __v: 0
+                }
+            },
+            { $limit: 10 } // prevent heavy responses
+        ]);
+
+        if (filteredUsers.length === 0) {
+            return res.status(404).json({ message: "No users found." });
+        }
+
+        res.status(200).json(filteredUsers);
+
+    } catch (error) {
+        console.log("Error in searchUser controller:", error.message);
+        res.status(500).json({ message: "Internal server error!" });
+    }
+};
