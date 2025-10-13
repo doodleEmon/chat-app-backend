@@ -139,7 +139,7 @@ export const checkAuth = async (req, res) => {
     }
 }
 
-export const searchUser = async (req, res) => {
+export const searchUsers = async (req, res) => {
     try {
         const { query } = req.query; // use query params for cleaner API (e.g., /api/users/search?query=emon)
         const userId = req.user._id; // current logged-in user (from auth middleware)
