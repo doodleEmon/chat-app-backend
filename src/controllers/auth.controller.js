@@ -153,22 +153,27 @@ export const searchUsers = async (req, res) => {
 
         // Use aggregation for better control and flexibility
         const filteredUsers = await User.aggregate([
+            // 1. Condition
             {
                 $match: {
-                    _id: { $ne: userId }, // exclude current user
+                    _id: { $ne: userId },
                     $or: [
                         { fullname: { $regex: searchRegex } },
                         { email: { $regex: searchRegex } }
                     ]
                 }
             },
+
+            // Exclude sensitive fields
             {
                 $project: {
-                    password: 0, // exclude sensitive fields
+                    password: 0,
                     __v: 0
                 }
             },
-            { $limit: 10 } // prevent heavy responses
+
+            // Limitation of response data
+            { $limit: 10 }
         ]);
 
         if (filteredUsers.length === 0) {
