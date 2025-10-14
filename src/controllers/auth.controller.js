@@ -144,9 +144,9 @@ export const searchUsers = async (req, res) => {
         const { query } = req.query; // use query params for cleaner API (e.g., /api/users/search?query=emon)
         const userId = req.user._id; // current logged-in user (from auth middleware)
 
-        if (!query || query.trim() === "") {
-            return res.status(400).json({ message: "Search query is required." });
-        }
+        // if (!query || query.trim() === "") {
+        //     return res.status(400).json({ message: "Search query is required." });
+        // }
 
         // Build regex for case-insensitive partial match
         const searchRegex = new RegExp(query, "i");
