@@ -23,6 +23,7 @@ export const getReceiverSocketId = (receiverId) => {
 
 
 io.on("connection", (socket) => {
+    console.log("🚀 ~ socket:", socket)
     console.log("User Connected:", socket.id);
 
     const userId = socket.handshake.query.userId;
