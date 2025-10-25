@@ -1,4 +1,5 @@
 import cloudinary from "../lib/cloudinary.js";
+import { getReceiverSocketId } from "../lib/socket.js";
 import Message from "../models/message.model.js";
 import User from "../models/user.model.js";
 
@@ -80,9 +81,24 @@ export const sendMessages = async (req, res) => {
             image: imageUrl
         })
 
-        // todo: real time implementation: socket.io
-
         await newMessage.save();
+
+
+        // REAL-TIME SOCKET.IO IMPLEMENTATION
+        // ============================================Start
+
+        // Step 1: Get the receiver's socket ID from the Map
+        const receiverSocketId = getReceiverSocketId(receiverId);
+
+        // Step 2: If receiver is online, emit the message to them
+        if (receiverSocketId) {
+            // io.to(socketId) sends event to that specific socket only
+            io.to(receiverSocketId).emit("newMessage", newMessage);
+            console.log(`Message sent to user ${receiverId} via socket ${receiverSocketId}`);
+        } else {
+            console.log(`User ${receiverId} is offline - message saved but not sent via socket`);
+        }
+        // ============================================End
 
         res.status(201).json(newMessage);
     } catch (error) {
