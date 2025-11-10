@@ -135,7 +135,7 @@ export const checkAuth = async (req, res) => {
         res.status(200).json(req.user);
     } catch (error) {
         console.log('Error from checkAuth controller.', error.message);
-        res.status(401).json({ message: "Unauthorized access" });
+        res.status(401).json({ message: "Auth-controller: Unauthorized access" });
     }
 }
 
