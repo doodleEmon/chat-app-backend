@@ -8,7 +8,7 @@ const server = createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: 'https://chat-app-frontend-ten-kappa.vercel.app',
+        origin: ['https://chat-app-frontend-ten-kappa.vercel.app', 'http://localhost:3000'],
         credentials: true
     }
 })
